@@ -25,6 +25,20 @@ func abs(a int) int {
 	return a
 }
 
+func gcd(a, b int64) int64 {
+	for b != 0 {
+		t := b
+		b = a % b
+		a = t
+	}
+	return a
+}
+
+func lcm(a, b int64) int64 {
+	result := a * b / gcd(a, b)
+	return result
+}
+
 func (s system) calcEnergy() int {
 	totalEnergy := 0
 	for i := range s.moons {
@@ -90,12 +104,29 @@ func simulateSystem(input []string, steps int) int {
 
 func howManySteps(in []string) int64 {
 	sys := createSystem(in)
-	for i := int64(0); ; i++ {
-		sys.calcStep()
-		if sys.calcEnergy() == 0 {
-			return i
+	periods := make([]int64, 3)
+	func() {
+		for i := int64(1); ; i++ {
+			sys.calcStep()
+			for k := range periods {
+				periodFound := true
+				for m := range sys.moons {
+					if sys.velocities[m].coords[k] != 0 {
+						periodFound = false
+					}
+				}
+				if periodFound && periods[k] == 0 {
+					periods[k] = i
+					if periods[0] != 0 && periods[1] != 0 && periods[2] != 0 {
+						return
+					}
+				}
+			}
 		}
-	}
+	}()
+	result := lcm(periods[0], periods[1])
+	result = lcm(result, periods[2])
+	return result * 2
 }
 
 func main() {
@@ -111,6 +142,6 @@ func main() {
 		input = append(input, scanner.Text())
 	}
 	fmt.Printf("Result %v\n", simulateSystem(input, 1000))
-	//fmt.Printf("Result2 %v\n", howManySteps(input))
+	fmt.Printf("Result2 %v\n", howManySteps(input))
 
 }
