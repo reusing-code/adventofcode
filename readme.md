@@ -1,1 +1,1 @@
-http://adventofcode.com/2017
+https://adventofcode.com
