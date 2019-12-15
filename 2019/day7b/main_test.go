@@ -4,12 +4,12 @@ import "testing"
 
 func Test_thrusterSequence(t *testing.T) {
 	type args struct {
-		data []int
+		data []int64
 	}
 	tests := []struct {
 		name string
 		args args
-		want int
+		want int64
 	}{
 		{"Example1", args{[]int{3, 26, 1001, 26, -4, 26, 3, 27, 1002, 27, 2, 27, 1, 27, 26, 27, 4, 27, 1001, 28, -1, 28, 1005, 28, 6, 99, 0, 0, 5}}, 139629729},
 		{"Example2", args{[]int{3, 52, 1001, 52, -5, 52, 3, 53, 1, 52, 56, 54, 1007, 54, 5, 55, 1005, 55, 26, 1001, 54,

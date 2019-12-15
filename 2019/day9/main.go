@@ -7,25 +7,29 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+
+	"github.com/reusing-code/adventofcode/2019/intcode"
 )
 
-func runBOOST(data []int64) {
+func runBOOST(data []int64, mode int) {
 	var wg sync.WaitGroup
-	
-	program := newProgram("BOOST", data)
+	input := make(chan int64, 1)
+	output := make(chan int64, 1)
+
+	program := intcode.NewProgram("BOOST", data, input, output)
 	go func() {
-		program.execute()
-		close(program.output)
-		
+		program.Execute()
+		close(output)
+
 	}()
+	wg.Add(1)
 	go func() {
-		wg.Add(1)
-		for res := range program.output {
+		for res := range output {
 			fmt.Printf("%v\n", res)
 		}
 		wg.Done()
 	}()
-	program.input <- 2
+	input <- int64(mode)
 	wg.Wait()
 }
 
@@ -46,7 +50,7 @@ func main() {
 		in, _ := strconv.ParseInt(v, 10, 64)
 		data[i] = in
 	}
-
-	runBOOST(data)
+	runBOOST(data, 1)
+	runBOOST(data, 2)
 
 }

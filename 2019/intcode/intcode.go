@@ -1,6 +1,6 @@
-package main
+package intcode
 
-type program struct {
+type Program struct {
 	name   string
 	data   []int64
 	input  chan int64
@@ -11,7 +11,7 @@ type program struct {
 
 type instruction func(params int64)
 
-func (p *program) arith(params int64, op func(int64, int64) int64) {
+func (p *Program) arith(params int64, op func(int64, int64) int64) {
 	mode1 := params % 10
 	params /= 10
 	mode2 := params % 10
@@ -22,19 +22,19 @@ func (p *program) arith(params int64, op func(int64, int64) int64) {
 	p.iptr += 4
 }
 
-func (p *program) add(params int64) {
+func (p *Program) add(params int64) {
 	p.arith(params, func(a, b int64) int64 {
 		return a + b
 	})
 }
 
-func (p *program) mult(params int64) {
+func (p *Program) mult(params int64) {
 	p.arith(params, func(a, b int64) int64 {
 		return a * b
 	})
 }
 
-func (p *program) lt(params int64) {
+func (p *Program) lt(params int64) {
 	p.arith(params, func(a, b int64) int64 {
 		if a < b {
 			return 1
@@ -43,7 +43,7 @@ func (p *program) lt(params int64) {
 	})
 }
 
-func (p *program) eq(params int64) {
+func (p *Program) eq(params int64) {
 	p.arith(params, func(a, b int64) int64 {
 		if a == b {
 			return 1
@@ -52,7 +52,7 @@ func (p *program) eq(params int64) {
 	})
 }
 
-func (p *program) in(params int64) {
+func (p *Program) in(params int64) {
 
 	val := <-p.input
 	idx := p.paramIdx(params%10, p.iptr+1)
@@ -60,13 +60,13 @@ func (p *program) in(params int64) {
 	p.iptr += 2
 }
 
-func (p *program) out(params int64) {
+func (p *Program) out(params int64) {
 	val := p.param(params%10, p.iptr+1)
 	p.output <- val
 	p.iptr += 2
 }
 
-func (p *program) jmp(params int64, cmp func(int64) bool) {
+func (p *Program) jmp(params int64, cmp func(int64) bool) {
 	mode1 := params % 10
 	params /= 10
 	mode2 := params % 10
@@ -79,31 +79,31 @@ func (p *program) jmp(params int64, cmp func(int64) bool) {
 	}
 }
 
-func (p *program) jtrue(params int64) {
+func (p *Program) jtrue(params int64) {
 	p.jmp(params, func(a int64) bool {
 		return a != 0
 	})
 }
 
-func (p *program) jfalse(params int64) {
+func (p *Program) jfalse(params int64) {
 	p.jmp(params, func(a int64) bool {
 		return a == 0
 	})
 }
 
-func (p *program) adjustBase(params int64) {
+func (p *Program) adjustBase(params int64) {
 	val := p.param(params, p.iptr+1)
 	p.base += val
 	p.iptr += 2
 }
 
-func (p *program) ensureIdx(idx int64) {
+func (p *Program) ensureIdx(idx int64) {
 	if idx >= int64(len(p.data)) {
 		p.data = append(p.data, make([]int64, idx-int64(len(p.data))+1)...)
 	}
 }
 
-func (p *program) paramIdx(mode int64, idx int64) int64 {
+func (p *Program) paramIdx(mode int64, idx int64) int64 {
 	var finalIdx int64
 	switch mode {
 	case 0:
@@ -119,19 +119,19 @@ func (p *program) paramIdx(mode int64, idx int64) int64 {
 	return finalIdx
 }
 
-func (p *program) param(mode int64, idx int64) int64 {
+func (p *Program) param(mode int64, idx int64) int64 {
 	finalIdx := p.paramIdx(mode, idx)
 	return p.data[finalIdx]
 }
 
-func newProgram(name string, data []int64) *program {
-	result := &program{name: name, data: data, iptr: 0, input: make(chan int64), output: make(chan int64), base: 0}
+func NewProgram(name string, data []int64, input, output chan int64) *Program {
+	result := &Program{name: name, data: append(make([]int64, 0, len(data)), data...),
+		iptr: 0, input: input, output: output, base: 0}
 	return result
 }
 
-func (p *program) execute() {
+func (p *Program) Execute() {
 	for {
-		var inst instruction
 		opcode := p.data[p.iptr]
 		op := opcode % 100
 		params := opcode / 100
@@ -139,24 +139,23 @@ func (p *program) execute() {
 		case 99:
 			return
 		case 1:
-			inst = p.add
+			p.add(params)
 		case 2:
-			inst = p.mult
+			p.mult(params)
 		case 3:
-			inst = p.in
+			p.in(params)
 		case 4:
-			inst = p.out
+			p.out(params)
 		case 5:
-			inst = p.jtrue
+			p.jtrue(params)
 		case 6:
-			inst = p.jfalse
+			p.jfalse(params)
 		case 7:
-			inst = p.lt
+			p.lt(params)
 		case 8:
-			inst = p.eq
+			p.eq(params)
 		case 9:
-			inst = p.adjustBase
+			p.adjustBase(params)
 		}
-		inst(params)
 	}
 }

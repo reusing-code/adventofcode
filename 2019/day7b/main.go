@@ -7,11 +7,13 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+
+	"github.com/reusing-code/adventofcode/2019/intcode"
 )
 
-func nextPerm(p []int) {
+func nextPerm(p []int64) {
 	for i := len(p) - 1; i >= 0; i-- {
-		for i == 0 || p[i] < len(p)-i-1 {
+		for i == 0 || p[i] < int64(len(p)-i-1) {
 			p[i]++
 			return
 		}
@@ -19,26 +21,24 @@ func nextPerm(p []int) {
 	}
 }
 
-func getPerm(orig, p []int) []int {
-	result := append([]int{}, orig...)
+func getPerm(orig, p []int64) []int64 {
+	result := append([]int64{}, orig...)
 	for i, v := range p {
-		result[i], result[i+v] = result[i+v], result[i]
+		result[i], result[int64(i)+v] = result[int64(i)+v], result[i]
 	}
 	return result
 }
 
-func runThrusterSequence(data, p []int, input int) int {
-	chans := make([]chan int, len(p))
+func runThrusterSequence(data, p []int64, input int64) int64 {
+	chans := make([]chan int64, len(p))
 	for i, _ := range chans {
-		chans[i] = make(chan int, 1)
+		chans[i] = make(chan int64, 1)
 		chans[i] <- p[i]
 	}
-	amps := make([]program, len(p))
+	amps := make([]intcode.Program, len(p))
 	for i, _ := range amps {
-		localData := append([]int{}, data...)
-		amps[i] = *newProgram(strconv.Itoa(i), localData)
-		amps[i].input = chans[i]
-		amps[i].output = chans[(i+1)%len(p)]
+
+		amps[i] = *intcode.NewProgram(strconv.Itoa(i), data, chans[i], chans[(i+1)%len(p)])
 	}
 
 	var wg sync.WaitGroup
@@ -46,24 +46,24 @@ func runThrusterSequence(data, p []int, input int) int {
 		wg.Add(1)
 		ii := i // do not use loop iterator variabls in goroutines!
 		go func() {
-			amps[ii].execute()
+			amps[ii].Execute()
 			wg.Done()
 		}()
 	}
 	chans[0] <- input
 	wg.Wait()
 
-	result := <- chans[0]
+	result := <-chans[0]
 
 	return result
 }
 
-func thrusterSequence(data []int) int {
-	maxThrust := 0
-	orig := []int{5, 6, 7, 8, 9}
+func thrusterSequence(data []int64) int64 {
+	maxThrust := int64(0)
+	orig := []int64{5, 6, 7, 8, 9}
 	var wg sync.WaitGroup
-	resultChan := make(chan int, 10)
-	for p := make([]int, 5); p[0] < len(p); nextPerm(p) {
+	resultChan := make(chan int64, 10)
+	for p := make([]int64, 5); p[0] < int64(len(p)); nextPerm(p) {
 		wg.Add(1)
 		thrusterConfig := getPerm(orig, p)
 		go func() {
@@ -96,9 +96,9 @@ func main() {
 
 	for scanner.Scan() {
 		split := strings.Split(scanner.Text(), ",")
-		data := make([]int, len(split))
+		data := make([]int64, len(split))
 		for i, v := range split {
-			in, _ := strconv.Atoi(v)
+			in, _ := strconv.ParseInt(v, 10, 64)
 			data[i] = in
 		}
 
