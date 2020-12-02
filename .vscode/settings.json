@@ -1,5 +1,6 @@
 {
     "files.associations": {
+        ".env.local ": "dotenv",
         "array": "cpp",
         "atomic": "cpp",
         "*.tcc": "cpp",
@@ -53,6 +54,11 @@
         "sstream": "cpp",
         "stdexcept": "cpp",
         "streambuf": "cpp",
-        "typeinfo": "cpp"
-    }
+        "typeinfo": "cpp",
+        "bit": "cpp",
+        "compare": "cpp",
+        "concepts": "cpp",
+        "ranges": "cpp"
+    },
+    "cmake.configureOnOpen": false
 }

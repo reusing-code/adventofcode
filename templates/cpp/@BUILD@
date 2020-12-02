@@ -1,0 +1,25 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
+
+cc_library(
+    name = "@DAY@-lib",
+    srcs = ["@DAY@.cc"],
+    hdrs = ["@DAY@.h"],
+)
+
+cc_binary(
+    name = "@DAY@",
+    srcs = ["main.cc"],
+    deps = [
+        ":@DAY@-lib",
+    ],
+)
+
+cc_test(
+    name = "@DAY@_test",
+    size = "enormous",
+    srcs = ["@DAY@_test.cc"],
+    deps = [
+        ":@DAY@-lib",
+        "@googletest//:gtest_main",
+    ],
+)
