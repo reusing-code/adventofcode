@@ -10,10 +10,12 @@ def main():
     parser.add_argument("folder", help="name for folder and files. eg. day1", type=str)
     args = parser.parse_args()
 
-    destpath = Path("..") / args.year / args.folder
+    basepath = os.path.dirname(os.path.realpath(__file__))
+
+    destpath = Path(basepath)/ ".." / args.year / args.folder
     destpath.mkdir(parents=True, exist_ok=False)
 
-    for entry in os.scandir("cpp"):
+    for entry in os.scandir(Path(basepath) / "cpp"):
         if entry.is_file():
             newName = Path(entry.path).name.replace("@DAY@", args.folder).replace("@BUILD@", "BUILD")
             #shutil.copyfile(entry.path, destpath / newName)

@@ -58,7 +58,13 @@
         "bit": "cpp",
         "compare": "cpp",
         "concepts": "cpp",
-        "ranges": "cpp"
+        "ranges": "cpp",
+        "bitset": "cpp",
+        "condition_variable": "cpp",
+        "cstring": "cpp",
+        "regex": "cpp",
+        "shared_mutex": "cpp",
+        "stop_token": "cpp"
     },
     "cmake.configureOnOpen": false
 }
