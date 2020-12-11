@@ -17,9 +17,3 @@ TEST(day5, day5PartOne) {
   TestCase tc{{"BFFFBBFRRR", "FFFBBBFRRR", "BBFFBBFRLL"}, 820};
   checkTC(tc, day5::puzzle1);
 }
-
-TEST(day5, day5PartTwo) {
-  using TestCase = std::tuple<std::vector<std::string>, int>;
-  TestCase tc{{""}, 0};
-  checkTC(tc, day5::puzzle2);
-}

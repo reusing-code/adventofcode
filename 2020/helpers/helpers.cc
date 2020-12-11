@@ -11,4 +11,20 @@ StringGroups splitByEmptyLine(const std::vector<std::string>& in) {
   }
   return result;
 }
+
+void splitRecursive(const std::string& in, char separator,
+                    std::vector<std::string>& out) {
+  auto find = in.find(separator);
+  out.push_back(in.substr(0, find));
+  if (find == std::string::npos) {
+    return;
+  }
+  splitRecursive(in.substr(find + 1), separator, out);
+}
+
+std::vector<std::string> split(const std::string& in, char separator) {
+  std::vector<std::string> result;
+  splitRecursive(in, separator, result);
+  return result;
+}
 }  // namespace helpers
