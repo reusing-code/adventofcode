@@ -4,6 +4,9 @@ cc_library(
     name = "@DAY@-lib",
     srcs = ["@DAY@.cc"],
     hdrs = ["@DAY@.h"],
+    deps = [
+        "//helpers",
+    ],
 )
 
 cc_binary(

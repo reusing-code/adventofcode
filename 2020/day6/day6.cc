@@ -4,7 +4,7 @@
 #include <set>
 #include <unordered_set>
 
-#include "2020/helpers/helpers.h"
+#include "helpers/helpers.h"
 
 int day6::puzzle1(const std::vector<std::string>& in) {
   int result{0};

@@ -5,7 +5,7 @@ cc_library(
     srcs = ["day6.cc"],
     hdrs = ["day6.h"],
     deps = [
-        "//2020/helpers",
+        "//helpers",
     ],
 )
 

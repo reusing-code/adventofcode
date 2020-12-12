@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "2020/helpers/helpers.h"
+#include "helpers/helpers.h"
 
 const std::string CONTAINS_STR{" bags contain "};
 const std::string NO_BAGS{"no other bags."};

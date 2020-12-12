@@ -1,28 +1,28 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 
 cc_library(
-    name = "day7-lib",
-    srcs = ["day7.cc"],
-    hdrs = ["day7.h"],
+    name = "day8-lib",
+    srcs = ["day8.cc"],
+    hdrs = ["day8.h"],
     deps = [
         "//helpers",
     ],
 )
 
 cc_binary(
-    name = "day7",
+    name = "day8",
     srcs = ["main.cc"],
     deps = [
-        ":day7-lib",
+        ":day8-lib",
     ],
 )
 
 cc_test(
-    name = "day7_test",
+    name = "day8_test",
     size = "enormous",
-    srcs = ["day7_test.cc"],
+    srcs = ["day8_test.cc"],
     deps = [
-        ":day7-lib",
+        ":day8-lib",
         "@googletest//:gtest_main",
     ],
 )
