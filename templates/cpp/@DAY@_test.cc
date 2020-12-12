@@ -13,13 +13,13 @@ auto checkTC = [](const auto& tc, auto checkfun) {
 };
 
 TEST(@DAY@, @DAY@PartOne) {
-  using TestCase = std::tuple<std::vector<std::string>, int>;
+  using TestCase = std::tuple<std::vector<std::string>, int64_t>;
   TestCase tc{{""}, 0};
   checkTC(tc, @DAY@::puzzle1);
 }
 
 TEST(@DAY@, @DAY@PartTwo) {
-  using TestCase = std::tuple<std::vector<std::string>, int>;
+  using TestCase = std::tuple<std::vector<std::string>, int64_t>;
   TestCase tc{{""}, 0};
   checkTC(tc, @DAY@::puzzle2);
 }

@@ -27,4 +27,12 @@ std::vector<std::string> split(const std::string& in, char separator) {
   splitRecursive(in, separator, result);
   return result;
 }
+
+std::vector<int64_t> parseIntVec(const std::vector<std::string>& in) {
+  std::vector<int64_t> result;
+  result.reserve(in.size());
+  std::transform(in.begin(), in.end(), std::back_inserter(result),
+                 [](const std::string& str) { return std::stoll(str); });
+  return result;
+}
 }  // namespace helpers
