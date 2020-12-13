@@ -19,7 +19,7 @@ cc_binary(
 
 cc_test(
     name = "@DAY@_test",
-    size = "enormous",
+    size = "small",
     srcs = ["@DAY@_test.cc"],
     deps = [
         ":@DAY@-lib",

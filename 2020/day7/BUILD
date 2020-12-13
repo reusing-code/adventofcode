@@ -19,7 +19,7 @@ cc_binary(
 
 cc_test(
     name = "day7_test",
-    size = "enormous",
+    size = "small",
     srcs = ["day7_test.cc"],
     deps = [
         ":day7-lib",
