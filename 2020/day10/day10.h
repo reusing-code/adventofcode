@@ -1,8 +1,8 @@
 #pragma once
 
+#include <iostream>
 #include <string>
 #include <vector>
-#include <iostream>
 
 class day10 {
  public:
@@ -10,5 +10,4 @@ class day10 {
   static int64_t puzzle2(const std::vector<std::string>& in);
 
  private:
-  
 };

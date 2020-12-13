@@ -16,9 +16,9 @@ int main(int argc, char const *argv[]) {
   while (std::getline(instr, line)) {
     input.push_back(line);
   }
-  int result1 = @DAY@::puzzle1(input);
+  int64_t result1 = @DAY@::puzzle1(input);
   std::cout << "result1: " << result1 << "\n";
-  int result2 = @DAY@::puzzle2(input);
+  int64_t result2 = @DAY@::puzzle2(input);
   std::cout << "result2: " << result2 << "\n";
 
   return 0;

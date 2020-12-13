@@ -18,7 +18,7 @@ int main(int argc, char const *argv[]) {
   }
   int result1 = day10::puzzle1(input);
   std::cout << "result1: " << result1 << "\n";
-  int result2 = day10::puzzle2(input);
+  int64_t result2 = day10::puzzle2(input);
   std::cout << "result2: " << result2 << "\n";
 
   return 0;
