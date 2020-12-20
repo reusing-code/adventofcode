@@ -18,3 +18,4 @@
 # Bazel symlinks
 /bazel-*
 
+compile_commands.json

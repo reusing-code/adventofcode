@@ -1,5 +1,7 @@
 #include "@DAY@.h"
 
+#include <algorithm>
+
 #include "helpers/helpers.h"
 
 int64_t @DAY@::puzzle1(const std::vector<std::string>& in) {
