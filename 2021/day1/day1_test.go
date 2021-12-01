@@ -11,7 +11,8 @@ func Test_day1_puzzle1(t *testing.T) {
 		input []string
 		want  int
 	}{
-		{name: "Example1", input: []string{"199",
+		{name: "Example1", input: []string{
+			"199",
 			"200",
 			"208",
 			"210",
@@ -37,7 +38,8 @@ func Test_day1_puzzle2(t *testing.T) {
 		input []string
 		want  int
 	}{
-		{name: "Example1", input: []string{"199",
+		{name: "Example1", input: []string{
+			"199",
 			"200",
 			"208",
 			"210",

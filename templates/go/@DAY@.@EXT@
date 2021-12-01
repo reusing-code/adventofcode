@@ -1,0 +1,12 @@
+package main
+
+import "github.com/reusing-code/adventofcode/gohelpers"
+
+func puzzle1(input []string) int {
+	_ = gohelpers.ParseIntVec(input)
+	return 1
+}
+
+func puzzle2(input []string) int {
+	return 1
+}

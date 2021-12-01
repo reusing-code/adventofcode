@@ -6,6 +6,7 @@ go_library(
         "day1.go",
         "main.go",
     ],
+    deps = ["//gohelpers"],
     importpath = "github.com/reusing-code/adventofcode/2021/day1",
     visibility = ["//visibility:private"],
 )

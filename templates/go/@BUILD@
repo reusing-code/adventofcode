@@ -1,20 +1,21 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
 
 go_library(
-    name = "go_default_library",
+    name = "go_@DAY@_library",
     srcs = ["main.go", "@DAY@.go"],
     importpath = "github.com/reusing-code/adventofcode/@YEAR@/@DAY@",
+    deps = ["//gohelpers"],
     visibility = ["//visibility:private"],
 )
 
 go_binary(
     name = "@DAY@",
-    embed = [":go_default_library"],
+    embed = [":go_@DAY@_library"],
     visibility = ["//visibility:public"],
 )
 
 go_test(
-    name = "go_default_test",
+    name = "go_@DAY@_test",
     srcs = ["@DAY@_test.go"],
-    embed = [":go_default_library"],
+    embed = [":go_@DAY@_library"],
 )
