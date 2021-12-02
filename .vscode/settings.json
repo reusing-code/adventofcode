@@ -67,17 +67,20 @@
     "stop_token": "cpp"
   },
   "cmake.configureOnOpen": false,
-  "go.goroot": "${workspaceFolder}/bazel-adventofcode/external/go_sdk",
+  //"go.goroot": "${workspaceFolder}/bazel-adventofcode/external/go_sdk",
+  "go.toolsEnvVars": {
+    //"GOPACKAGESDRIVER": "${workspaceFolder}/tools/gopackagesdriver.sh"
+  },
   "go.enableCodeLens": {
     "references": false,
     "runtest": true
   },
   "gopls": {
     "build.directoryFilters": [
+      "-bazel-adventofcode",
       "-bazel-bin",
       "-bazel-out",
-      "-bazel-testlogs",
-      "-bazel-adventofcode"
+      "-bazel-testlogs"
     ],
     "formatting.gofumpt": true,
     "formatting.local": "github.com/reusing-code/adventofcode",
@@ -93,7 +96,7 @@
       "vendor": false
     }
   },
-  "go.useLanguageServer": true,
+  "go.useLanguageServer": false,
   "go.buildOnSave": "off",
   "go.lintOnSave": "off",
   "go.vetOnSave": "off"
