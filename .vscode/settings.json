@@ -67,13 +67,10 @@
     "stop_token": "cpp"
   },
   "cmake.configureOnOpen": false,
-  "go.goroot": "${workspaceFolder}/bazel-${workspaceFolderBasename}/external/go_sdk",
-  "go.toolsEnvVars": {
-    "GOPACKAGESDRIVER": "${workspaceFolder}/tools/gopackagesdriver.sh"
-  },
+  "go.goroot": "${workspaceFolder}/bazel-adventofcode/external/go_sdk",
   "go.enableCodeLens": {
     "references": false,
-    "runtest": false
+    "runtest": true
   },
   "gopls": {
     "build.directoryFilters": [

@@ -11,7 +11,14 @@ func Test_day2_puzzle1(t *testing.T) {
 		input []string
 		want  int
 	}{
-		{name: "Example1", input: []string{"1"}, want: 1},
+		{name: "Example1", input: []string{
+			"forward 5",
+			"down 5",
+			"forward 8",
+			"up 3",
+			"down 8",
+			"forward 2",
+		}, want: 150},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -28,7 +35,14 @@ func Test_day2_puzzle2(t *testing.T) {
 		input []string
 		want  int
 	}{
-		{name: "Example1", input: []string{"1"}, want: 1},
+		{name: "Example1", input: []string{
+			"forward 5",
+			"down 5",
+			"forward 8",
+			"up 3",
+			"down 8",
+			"forward 2",
+		}, want: 900},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
