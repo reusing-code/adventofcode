@@ -27,11 +27,11 @@ def main():
     for entry in os.scandir(Path(basepath) / args.language):
         if entry.is_file():
             newName = Path(entry.path).name.replace(
-                "@DAY@", args.folder).replace("@BUILD@", "BUILD")
+                "@DAY@", args.folder).replace("@BUILD@", "BUILD").replace('@EXT@', args.language)
             with open(entry.path, "rt") as fin, open(destpath / newName, "wt") as fout:
                 for line in fin:
                     fout.write(line.replace(
-                        '@DAY@', args.folder).replace('@YEAR@', args.year).replace('@EXT@', args.language))
+                        '@DAY@', args.folder).replace('@YEAR@', args.year))
 
 
 if __name__ == "__main__":
