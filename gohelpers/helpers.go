@@ -13,3 +13,22 @@ func ParseIntVec(in []string) []int {
 	}
 	return result
 }
+
+func SplitByEmptyLine(in []string) [][]string {
+	result := make([][]string, 0)
+	current := make([]string, 0)
+	for _, str := range in {
+		if len(str) != 0 {
+			current = append(current, str)
+		} else {
+			if len(current) > 0 {
+				result = append(result, current)
+				current = make([]string, 0)
+			}
+		}
+	}
+	if len(current) > 0 {
+		result = append(result, current)
+	}
+	return result
+}
