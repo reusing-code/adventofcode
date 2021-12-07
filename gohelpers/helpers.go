@@ -1,6 +1,9 @@
 package gohelpers
 
-import "strconv"
+import (
+	"strconv"
+	"strings"
+)
 
 func ParseIntVec(in []string) []int {
 	result := make([]int, len(in))
@@ -10,6 +13,19 @@ func ParseIntVec(in []string) []int {
 			panic(err)
 		}
 		result[i] = v
+	}
+	return result
+}
+
+func ParseIntVecSingleLine(in string) [] int {
+	result := make([]int, 0, (len(in) / 2) + 1)
+	stringSlice := strings.Split(in, ",")
+	for _, str := range stringSlice {
+		v, err := strconv.Atoi(str)
+		if err != nil {
+			panic(err)
+		}
+		result = append(result, v)
 	}
 	return result
 }
