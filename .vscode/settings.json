@@ -96,7 +96,7 @@
       "vendor": false
     }
   },
-  "go.useLanguageServer": false,
+  "go.useLanguageServer": true,
   "go.buildOnSave": "off",
   "go.lintOnSave": "off",
   "go.vetOnSave": "off"
