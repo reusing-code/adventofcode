@@ -17,8 +17,8 @@ func ParseIntVec(in []string) []int {
 	return result
 }
 
-func ParseIntVecSingleLine(in string) [] int {
-	result := make([]int, 0, (len(in) / 2) + 1)
+func ParseIntVecSingleLine(in string) []int {
+	result := make([]int, 0, (len(in)/2)+1)
 	stringSlice := strings.Split(in, ",")
 	for _, str := range stringSlice {
 		v, err := strconv.Atoi(str)
@@ -47,4 +47,19 @@ func SplitByEmptyLine(in []string) [][]string {
 		result = append(result, current)
 	}
 	return result
+}
+
+func ParseIntField(in []string) [][]int {
+	field := make([][]int, len(in))
+	for i, str := range in {
+		field[i] = make([]int, len(str))
+		for j, s := range str {
+			n, err := strconv.Atoi(string(s))
+			if err != nil {
+				panic(err)
+			}
+			field[i][j] = n
+		}
+	}
+	return field
 }
