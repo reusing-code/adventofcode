@@ -3,7 +3,7 @@ package main
 import "github.com/reusing-code/adventofcode/gohelpers"
 
 func puzzle1(input []string) int {
-	_ = gohelpers.ParseIntVec(input)
+	_ = gohelpers.SplitByEmptyLine(input)
 	return 1
 }
 

@@ -63,3 +63,14 @@ func ParseIntField(in []string) [][]int {
 	}
 	return field
 }
+
+func ParseCharField(in []string) [][]byte {
+	field := make([][]byte, len(in))
+	for i, str := range in {
+		field[i] = make([]byte, len(str))
+		for j, s := range str {
+			field[i][j] = byte(s)
+		}
+	}
+	return field
+}
