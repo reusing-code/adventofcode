@@ -74,3 +74,23 @@ func ParseCharField(in []string) [][]byte {
 	}
 	return field
 }
+
+func Abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
+}
+
+func Sign(x int) int {
+	if x < 0 {
+		return -1
+	}
+	if x == 0 {
+		return 0
+	}
+	if x > 0 {
+		return 1
+	}
+	panic("")
+}
