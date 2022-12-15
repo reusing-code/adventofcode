@@ -94,3 +94,13 @@ func Sign(x int) int {
 	}
 	panic("")
 }
+
+func Clamp(val int, from int, to int) int {
+	if val < from {
+		return from
+	}
+	if val > to {
+		return to
+	}
+	return val
+}
