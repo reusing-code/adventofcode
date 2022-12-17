@@ -12,7 +12,7 @@ func main() {
 	filename := ""
 	dir := os.Getenv("AOC_INPUT_DIR")
 	if len(dir) > 0 {
-		filename = path.Join(dir, "@DAY@.txt")
+		filename = path.Join(dir, "day17.txt")
 	}
 	if len(os.Args) > 1 {
 		filename = os.Args[1]
@@ -21,7 +21,7 @@ func main() {
 	if len(filename) == 0 {
 		fmt.Printf("No input file specified. Either specify path to input file as the first\n" +
 			"(and only one) command line parameter, or set the env variable AOC_INPUT_DIR to a\n" +
-			"directory that contains a file named '@DAY@.txt'")
+			"directory that contains a file named 'day17.txt'")
 		os.Exit(1)
 	}
 
@@ -48,5 +48,4 @@ func main() {
 	fmt.Printf("Puzzle2: %v\n", res2)
 	fmt.Printf("Runtime Puzzle1: %v\n", elapsed1)
 	fmt.Printf("Runtime Puzzle2: %v\n", elapsed2)
-
 }
