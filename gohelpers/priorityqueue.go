@@ -4,11 +4,6 @@ import (
 	"container/heap"
 )
 
-type Coord struct {
-	X int
-	Y int
-}
-
 // An Item is something we manage in a priority queue.
 type Item struct {
 	Value    Coord

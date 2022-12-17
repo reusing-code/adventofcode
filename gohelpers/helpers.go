@@ -5,6 +5,11 @@ import (
 	"strings"
 )
 
+type Coord struct {
+	X int
+	Y int
+}
+
 func ParseIntVec(in []string) []int {
 	result := make([]int, len(in))
 	for i, str := range in {

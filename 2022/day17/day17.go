@@ -1,15 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"image/color"
 
-type coord struct {
-	x int
-	y int
-}
+	"github.com/reusing-code/adventofcode/gohelpers"
+	"github.com/reusing-code/adventofcode/gohelpers/image"
+)
 
 type shape struct {
-	size   coord
-	points []coord
+	size   gohelpers.Coord
+	points []gohelpers.Coord
 }
 
 var shapes []*shape = createShapes()
@@ -17,11 +18,11 @@ var shapes []*shape = createShapes()
 func createShapes() []*shape {
 	result := make([]*shape, 5)
 
-	result[0] = &shape{coord{1, 4}, []coord{{0, 0}, {0, 1}, {0, 2}, {0, 3}}}
-	result[1] = &shape{coord{3, 3}, []coord{{0, 1}, {1, 0}, {1, 1}, {1, 2}, {2, 1}}}
-	result[2] = &shape{coord{3, 3}, []coord{{0, 0}, {0, 1}, {0, 2}, {1, 2}, {2, 2}}}
-	result[3] = &shape{coord{4, 1}, []coord{{0, 0}, {1, 0}, {2, 0}, {3, 0}}}
-	result[4] = &shape{coord{2, 2}, []coord{{0, 0}, {0, 1}, {1, 0}, {1, 1}}}
+	result[0] = &shape{gohelpers.Coord{1, 4}, []gohelpers.Coord{{0, 0}, {0, 1}, {0, 2}, {0, 3}}}
+	result[1] = &shape{gohelpers.Coord{3, 3}, []gohelpers.Coord{{0, 1}, {1, 0}, {1, 1}, {1, 2}, {2, 1}}}
+	result[2] = &shape{gohelpers.Coord{3, 3}, []gohelpers.Coord{{0, 0}, {0, 1}, {0, 2}, {1, 2}, {2, 2}}}
+	result[3] = &shape{gohelpers.Coord{4, 1}, []gohelpers.Coord{{0, 0}, {1, 0}, {2, 0}, {3, 0}}}
+	result[4] = &shape{gohelpers.Coord{2, 2}, []gohelpers.Coord{{0, 0}, {0, 1}, {1, 0}, {1, 1}}}
 	return result
 }
 
@@ -42,23 +43,56 @@ func printCavern(cavern [][7]bool) {
 	fmt.Println("")
 }
 
+var (
+	imgCounter int    = 0
+	draw       bool   = false
+	tmpFolder  string = "/tmp"
+)
+
+func drawCavern(cavern *[][7]bool, s *shape, sPos gohelpers.Coord) {
+	// warning: Switched x/y here!
+	colors := make(map[gohelpers.Coord]color.RGBA)
+	startX := 0
+	if len(*cavern) > 100 {
+		startX = len(*cavern) - 100
+	}
+	for x := startX; x < len(*cavern); x++ {
+		xImg := x - startX
+		for y := 0; y < 7; y++ {
+			if (*cavern)[x][y] {
+				colors[gohelpers.Coord{y + 1, xImg}] = color.RGBA{69, 69, 69, 255}
+			}
+		}
+	}
+	for x := 0; x < 100; x++ {
+		colors[gohelpers.Coord{0, x}] = color.RGBA{255, 255, 255, 255}
+		colors[gohelpers.Coord{8, x}] = color.RGBA{255, 255, 255, 255}
+	}
+	for _, p := range s.points {
+		colors[gohelpers.Coord{sPos.Y + p.Y + 1, sPos.X + p.X - startX}] = color.RGBA{255, 194, 25, 255}
+	}
+
+	image.DrawImage(colors, gohelpers.Coord{0, 0}, gohelpers.Coord{8, 106}, 4, fmt.Sprintf("%s/img%05d.png", tmpFolder, imgCounter))
+	imgCounter++
+}
+
 func dropShape(cavern *[][7]bool, s *shape, maxHeight int, jetPattern string, patternIdx *int) int {
-	sPos := coord{maxHeight + 4, 2}
+	sPos := gohelpers.Coord{maxHeight + 4, 2}
 	for {
 
-		isBlocked := func(pos coord) bool {
+		isBlocked := func(pos gohelpers.Coord) bool {
 			for _, v := range s.points {
-				p := coord{pos.x + v.x, pos.y + v.y}
-				if p.x < 0 {
+				p := gohelpers.Coord{pos.X + v.X, pos.Y + v.Y}
+				if p.X < 0 {
 					return true
 				}
-				if p.y < 0 || p.y > 6 {
+				if p.Y < 0 || p.Y > 6 {
 					return true
 				}
-				if p.x > maxHeight {
+				if p.X > maxHeight {
 					continue
 				}
-				if (*cavern)[p.x][p.y] {
+				if (*cavern)[p.X][p.Y] {
 					return true
 				}
 			}
@@ -71,23 +105,29 @@ func dropShape(cavern *[][7]bool, s *shape, maxHeight int, jetPattern string, pa
 		}
 		*patternIdx = (*patternIdx + 1) % len(jetPattern)
 
-		if !isBlocked(coord{sPos.x, sPos.y + dir}) {
-			sPos.y += dir
+		if !isBlocked(gohelpers.Coord{sPos.X, sPos.Y + dir}) {
+			sPos.Y += dir
 		}
 		// drop
 
-		if !isBlocked(coord{sPos.x - 1, sPos.y}) {
-			sPos.x--
+		if !isBlocked(gohelpers.Coord{sPos.X - 1, sPos.Y}) {
+			sPos.X--
 		} else {
+			if draw {
+				drawCavern(cavern, s, sPos)
+			}
 			currentMax := maxHeight
-			for newHeight := currentMax + 1; newHeight <= sPos.x+s.size.x-1; newHeight++ {
+			for newHeight := currentMax + 1; newHeight <= sPos.X+s.size.X-1; newHeight++ {
 				maxHeight = newHeight
 				*cavern = append(*cavern, [7]bool{})
 			}
 			for _, p := range s.points {
-				(*cavern)[sPos.x+p.x][sPos.y+p.y] = true
+				(*cavern)[sPos.X+p.X][sPos.Y+p.Y] = true
 			}
 			return maxHeight
+		}
+		if draw {
+			drawCavern(cavern, s, sPos)
 		}
 	}
 }
@@ -100,34 +140,34 @@ func puzzle1(input []string) int {
 	cavern := make([][7]bool, 1)
 	cavern[0] = [7]bool{true, true, true, true, true, true, true}
 
-	for i := 0; i < 2022; i++ {
+	for i := 0; i < 200; i++ {
 		s := shapes[i%len(shapes)]
 
 		maxHeight = dropShape(&cavern, s, maxHeight, jetPattern, &patternIdx)
 	}
-	return maxHeight
+	return 1
 }
 
 type cacheEntry struct {
-	coords    []coord
+	coords    []gohelpers.Coord
 	jetIdx    int
 	maxHeight int
 	i         int
 }
 
 func makeCacheEntry(cavern [][7]bool, jet int, maxHeight int, i int, cacheLines int) *cacheEntry {
-	result := &cacheEntry{make([]coord, 0, cacheLines*7), jet, maxHeight, i}
+	result := &cacheEntry{make([]gohelpers.Coord, 0, cacheLines*7), jet, maxHeight, i}
 	for x := len(cavern) - cacheLines; x < len(cavern); x++ {
 		for y := 0; y < 7; y++ {
 			if cavern[x][y] {
-				result.coords = append(result.coords, coord{x - (len(cavern) - cacheLines), y})
+				result.coords = append(result.coords, gohelpers.Coord{x - (len(cavern) - cacheLines), y})
 			}
 		}
 	}
 	return result
 }
 
-func cmp(a []coord, b []coord) bool {
+func cmp(a []gohelpers.Coord, b []gohelpers.Coord) bool {
 	if len(a) != len(b) {
 		return false
 	}

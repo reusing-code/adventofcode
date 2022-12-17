@@ -4,6 +4,7 @@ go_library(
     name = "gohelpers",
     srcs = [
         "helpers.go",
+        "priorityqueue.go",
     ],
     importpath = "github.com/reusing-code/adventofcode/gohelpers",
     visibility = ["//visibility:public"],
