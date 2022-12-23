@@ -10,6 +10,10 @@ type Coord struct {
 	Y int
 }
 
+func (c Coord) Add(other Coord) Coord {
+	return Coord{c.X + other.X, c.Y + other.Y}
+}
+
 func ParseIntVec(in []string) []int {
 	result := make([]int, len(in))
 	for i, str := range in {
