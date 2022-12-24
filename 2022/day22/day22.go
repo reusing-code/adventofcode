@@ -39,7 +39,6 @@ func parseMoves(in string) []move {
 		if c == 'R' || c == 'L' {
 			if number != 0 {
 				result = append(result, move{number, false})
-			} else {
 			}
 			dir := c == 'R'
 			result = append(result, move{0, dir})
@@ -141,9 +140,11 @@ func puzzle2(input []string) int {
 			next := pos.pos
 			for i := 0; i < move.val; i++ {
 				next = next.Add(directions[pos.dir])
-				next = mapping(next, directions[pos.dir])
+				var dir int
+				next, dir = mapping(next, pos.dir)
 				if field[next.X][next.Y] == '.' {
 					pos.pos = next
+					pos.dir = dir
 					continue
 				}
 				if field[next.X][next.Y] == '#' {
@@ -156,81 +157,81 @@ func puzzle2(input []string) int {
 	return 1000*(pos.pos.X+1) + 4*(pos.pos.Y+1) + pos.dir
 }
 
-func mapping(next gohelpers.Coord, dir gohelpers.Coord) gohelpers.Coord {
+func mapping(next gohelpers.Coord, dir int) (gohelpers.Coord, int) {
 	rotated := gohelpers.Coord{199 - next.X, 149 - next.Y}
-	dirRotated := gohelpers.Coord{-dir.X, -dir.Y}
-	result := mapping2(rotated, dirRotated)
-	return gohelpers.Coord{199 - result.X, 149 - result.Y}
+	dirRotated := (dir + 2) % 4
+	result, dirResult := mapping2(rotated, dirRotated)
+	return gohelpers.Coord{199 - result.X, 149 - result.Y}, (dirResult + 2) % 4
 }
 
 // mapping is rotated 180° :(((
-func mapping2(next gohelpers.Coord, dir gohelpers.Coord) gohelpers.Coord {
+func mapping2(next gohelpers.Coord, dir int) (gohelpers.Coord, int) {
 	// 1 -> 8
-	if next.X == -1 && dir.X == -1 {
-		return gohelpers.Coord{199, next.Y - 50}
+	if next.X == -1 && dir == 3 {
+		return gohelpers.Coord{199, next.Y - 50}, 3
 	}
 	// 2 -> 7
-	if next.Y == 150 && dir.Y == 1 && next.X < 50 {
-		return gohelpers.Coord{199, next.X + 50}
+	if next.Y == 150 && dir == 0 && next.X < 50 {
+		return gohelpers.Coord{199, next.X + 50}, 3
 	}
 	// 3 -> 6
-	if next.Y == 150 && dir.Y == 1 && next.X >= 50 && next.X < 100 {
-		return gohelpers.Coord{(50 - (next.X - 50)) + 149, 99}
+	if next.Y == 150 && dir == 0 && next.X >= 50 && next.X < 100 {
+		return gohelpers.Coord{(50 - (next.X - 50)) + 149, 99}, 2
 	}
 
 	// 4 -> 5
-	if next.X == 100 && dir.X == 1 && next.Y >= 100 {
-		return gohelpers.Coord{next.Y, 99}
+	if next.X == 100 && dir == 1 && next.Y >= 100 {
+		return gohelpers.Coord{next.Y, 99}, 2
 	}
 
 	// 5 -> 4
-	if next.Y == 100 && dir.Y == 1 && next.X >= 100 && next.X < 150 {
-		return gohelpers.Coord{99, next.X}
+	if next.Y == 100 && dir == 0 && next.X >= 100 && next.X < 150 {
+		return gohelpers.Coord{99, next.X}, 3
 	}
 
 	// 6 -> 3
-	if next.Y == 100 && dir.Y == 1 && next.X >= 150 {
-		return gohelpers.Coord{(50 - (next.X - 150)) + 49, 149}
+	if next.Y == 100 && dir == 0 && next.X >= 150 {
+		return gohelpers.Coord{(50 - (next.X - 150)) + 49, 149}, 2
 	}
 
 	// 7 -> 2
-	if next.X == 200 && dir.X == 1 && next.Y >= 50 && next.Y < 150 {
-		return gohelpers.Coord{next.Y - 50, 149}
+	if next.X == 200 && dir == 1 && next.Y >= 50 && next.Y < 150 {
+		return gohelpers.Coord{next.Y - 50, 149}, 2
 	}
 	// 8 -> 1
-	if next.X == 200 && dir.X == 1 && next.Y < 50 {
-		return gohelpers.Coord{0, next.Y + 100}
+	if next.X == 200 && dir == 1 && next.Y < 50 {
+		return gohelpers.Coord{0, next.Y + 100}, 1
 	}
 
 	// 9 -> 12
-	if next.Y == -1 && dir.Y == -1 && next.X >= 150 {
-		return gohelpers.Coord{(50 - (next.X - 150)) + 49, 50}
+	if next.Y == -1 && dir == 2 && next.X >= 150 {
+		return gohelpers.Coord{(50 - (next.X - 150)) + 49, 50}, 0
 	}
 
 	// 10 -> 11
-	if next.X == 149 && dir.X == -1 && next.Y < 50 {
-		return gohelpers.Coord{next.Y + 100, 50}
+	if next.X == 149 && dir == 3 && next.Y < 50 {
+		return gohelpers.Coord{next.Y + 100, 50}, 0
 	}
 
 	// 11 -> 10
-	if next.Y == 49 && dir.Y == -1 && next.X >= 100 && next.X < 150 {
-		return gohelpers.Coord{150, next.X - 100}
+	if next.Y == 49 && dir == 2 && next.X >= 100 && next.X < 150 {
+		return gohelpers.Coord{150, next.X - 100}, 1
 	}
 
 	// 12 -> 9
-	if next.Y == 49 && dir.Y == -1 && next.X >= 50 && next.X < 100 {
-		return gohelpers.Coord{(50 - (next.X - 50)) + 149, 0}
+	if next.Y == 49 && dir == 2 && next.X >= 50 && next.X < 100 {
+		return gohelpers.Coord{(50 - (next.X - 50)) + 149, 0}, 0
 	}
 
 	// 13 -> 14
-	if next.X == 49 && dir.X == -1 && next.Y >= 50 && next.Y < 100 {
-		return gohelpers.Coord{next.Y - 50, 100}
+	if next.X == 49 && dir == 3 && next.Y >= 50 && next.Y < 100 {
+		return gohelpers.Coord{next.Y - 50, 100}, 0
 	}
 
 	// 14 -> 13
-	if next.Y == 99 && dir.Y == -1 && next.X < 50 {
-		return gohelpers.Coord{50, next.X + 50}
+	if next.Y == 99 && dir == 2 && next.X < 50 {
+		return gohelpers.Coord{50, next.X + 50}, 1
 	}
 
-	return next
+	return next, dir
 }
