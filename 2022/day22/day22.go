@@ -125,6 +125,14 @@ func puzzle2(input []string) int {
 			break
 		}
 	}
+	// width := 0
+	// for _, l := range field {
+	// 	if len(l) > width {
+	// 		width = len(l)
+	// 	}
+	// }
+	// width++
+	// image.DrawTextImage(field, width, len(field), "/tmp/bla.png")
 	moves := parseMoves(split[1][0])
 	for _, move := range moves {
 		if move.val == 0 {

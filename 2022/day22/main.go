@@ -10,7 +10,6 @@ import (
 
 func main() {
 	filename := ""
-	os.Setenv("AOC_INPUT_DIR", "/home/tobi/Downloads")
 	dir := os.Getenv("AOC_INPUT_DIR")
 	if len(dir) > 0 {
 		filename = path.Join(dir, "day22.txt")
