@@ -176,7 +176,7 @@ func mapping(next gohelpers.Coord, dir int) (gohelpers.Coord, int) {
 func mapping2(next gohelpers.Coord, dir int) (gohelpers.Coord, int) {
 	// 1 -> 8
 	if next.X == -1 && dir == 3 {
-		return gohelpers.Coord{199, next.Y - 50}, 3
+		return gohelpers.Coord{199, next.Y - 100}, 3
 	}
 	// 2 -> 7
 	if next.Y == 150 && dir == 0 && next.X < 50 {
