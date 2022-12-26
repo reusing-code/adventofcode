@@ -14,6 +14,10 @@ func (c Coord) Add(other Coord) Coord {
 	return Coord{c.X + other.X, c.Y + other.Y}
 }
 
+func (start Coord) Manhatten(goal Coord) int {
+	return Abs(start.X-goal.X) + Abs(start.Y-goal.Y)
+}
+
 func ParseIntVec(in []string) []int {
 	result := make([]int, len(in))
 	for i, str := range in {
