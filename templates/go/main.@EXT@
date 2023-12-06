@@ -32,10 +32,12 @@ func main() {
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
 
+	start0 := time.Now()
 	input := make([]string, 0)
 	for scanner.Scan() {
 		input = append(input, scanner.Text())
 	}
+	elapsed0 := time.Since(start0)
 
 	start1 := time.Now()
 	res1 := puzzle1(input)
@@ -46,6 +48,7 @@ func main() {
 
 	fmt.Printf("Puzzle1: %v\n", res1)
 	fmt.Printf("Puzzle2: %v\n", res2)
+	fmt.Printf("Runtime Reading input file: %v\n", elapsed0)
 	fmt.Printf("Runtime Puzzle1: %v\n", elapsed1)
 	fmt.Printf("Runtime Puzzle2: %v\n", elapsed2)
 
