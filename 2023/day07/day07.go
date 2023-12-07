@@ -33,7 +33,7 @@ func parseHand(in string) hand {
 }
 
 func handType(a hand) int {
-	counts := make(map[int]int)
+	var counts [15]int
 	for _, v := range a {
 		counts[v] += 1
 	}
@@ -71,14 +71,13 @@ func handType(a hand) int {
 }
 
 type handBid struct {
-	h   hand
-	bid int
+	h     hand
+	bid   int
+	score int
 }
 
 func compare(a, b handBid) int {
-	typeA := handType(a.h)
-	typeB := handType(b.h)
-	cmpType := cmp.Compare(typeA, typeB)
+	cmpType := cmp.Compare(a.score, b.score)
 	if cmpType != 0 {
 		return cmpType
 	}
@@ -97,7 +96,8 @@ func puzzle1(input []string) int {
 		var handStr string
 		var bid int
 		fmt.Sscanf(line, "%s %d", &handStr, &bid)
-		hands = append(hands, handBid{parseHand(handStr), bid})
+		h := parseHand(handStr)
+		hands = append(hands, handBid{h, bid, handType(h)})
 	}
 
 	slices.SortFunc(hands, compare)
@@ -133,7 +133,7 @@ func parseHand2(in string) hand {
 }
 
 func handType2(a hand) int {
-	counts := make(map[int]int)
+	var counts [15]int
 	for _, v := range a {
 		counts[v] += 1
 	}
@@ -177,9 +177,7 @@ func handType2(a hand) int {
 }
 
 func compare2(a, b handBid) int {
-	typeA := handType2(a.h)
-	typeB := handType2(b.h)
-	cmpType := cmp.Compare(typeA, typeB)
+	cmpType := cmp.Compare(a.score, b.score)
 	if cmpType != 0 {
 		return cmpType
 	}
@@ -198,7 +196,8 @@ func puzzle2(input []string) int {
 		var handStr string
 		var bid int
 		fmt.Sscanf(line, "%s %d", &handStr, &bid)
-		hands = append(hands, handBid{parseHand2(handStr), bid})
+		h := parseHand2(handStr)
+		hands = append(hands, handBid{h, bid, handType2(h)})
 	}
 
 	slices.SortFunc(hands, compare2)
