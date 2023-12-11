@@ -43,6 +43,19 @@ func ParseIntVecSingleLine(in string) []int {
 	return result
 }
 
+func ParseIntVecSingleLineSpace(in string) []int {
+	result := make([]int, 0, (len(in)/2)+1)
+	stringSlice := strings.Split(in, " ")
+	for _, str := range stringSlice {
+		v, err := strconv.Atoi(str)
+		if err != nil {
+			panic(err)
+		}
+		result = append(result, v)
+	}
+	return result
+}
+
 func SplitByEmptyLine(in []string) [][]string {
 	result := make([][]string, 0)
 	current := make([]string, 0)
