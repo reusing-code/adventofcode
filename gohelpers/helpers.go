@@ -1,6 +1,8 @@
 package gohelpers
 
 import (
+	"bufio"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -99,6 +101,38 @@ func ParseCharField(in []string) [][]byte {
 		}
 	}
 	return field
+}
+
+func PrintCharFieldToFile(in [][]byte, filename string) {
+	f, err := os.Create(filename)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	w := bufio.NewWriter(f)
+	defer w.Flush()
+
+	for _, line := range in {
+		w.Write(line)
+		w.WriteByte('\n')
+	}
+}
+
+func PrintRuneFieldToFile(in [][]rune, filename string) {
+	f, err := os.Create(filename)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	w := bufio.NewWriter(f)
+	defer w.Flush()
+
+	for _, line := range in {
+		w.WriteString(string(line))
+		w.WriteByte('\n')
+	}
 }
 
 func Abs(x int) int {
