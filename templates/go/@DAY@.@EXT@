@@ -1,9 +1,9 @@
 package main
 
-import "github.com/reusing-code/adventofcode/gohelpers"
+import h "github.com/reusing-code/adventofcode/gohelpers"
 
 func puzzle1(input []string) int {
-	_ = gohelpers.SplitByEmptyLine(input)
+	_ = h.SplitByEmptyLine(input)
 	return 1
 }
 
