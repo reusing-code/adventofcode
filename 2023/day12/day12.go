@@ -14,7 +14,52 @@ const (
 	unknown
 )
 
+func possiblyValidArrangement(springs []springState, groups []int) bool {
+	maxGroups := make([]int, 0)
+	currentGroupSize := 0
+	for _, v := range springs {
+		if v == unknown || v == broken {
+			currentGroupSize++
+		} else {
+			if currentGroupSize != 0 {
+				maxGroups = append(maxGroups, currentGroupSize)
+			}
+			currentGroupSize = 0
+		}
+	}
+	if currentGroupSize != 0 {
+		maxGroups = append(maxGroups, currentGroupSize)
+	}
+	sumOriginal := 0
+	maxGroupOriginal := 0
+	for _, v := range groups {
+		sumOriginal += v
+		if v > maxGroupOriginal {
+			maxGroupOriginal = v
+		}
+	}
+	sumMax := 0
+	maxGroupMax := 0
+	for _, v := range maxGroups {
+		sumMax += v
+		if v > maxGroupMax {
+			maxGroupMax = v
+		}
+	}
+	if sumOriginal > sumMax {
+		return false
+	}
+	if maxGroupOriginal > maxGroupMax {
+		return false
+	}
+
+	return true
+}
+
 func possibleArrangements(springs []springState, groups []int) int {
+	if !possiblyValidArrangement(springs, groups) {
+		return 0
+	}
 	checkGroups := make([]int, 0)
 	currentGroupSize := 0
 	for i, v := range springs {
