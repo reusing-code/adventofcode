@@ -14,85 +14,86 @@ const (
 	unknown
 )
 
-func possiblyValidArrangement(springs []springState, groups []int) bool {
-	maxGroups := make([]int, 0)
-	currentGroupSize := 0
+func hashKey(springs []springState, groups []int) string {
+	result := make([]byte, 0, len(springs)+1+len(groups))
 	for _, v := range springs {
-		if v == unknown || v == broken {
-			currentGroupSize++
-		} else {
-			if currentGroupSize != 0 {
-				maxGroups = append(maxGroups, currentGroupSize)
-			}
-			currentGroupSize = 0
-		}
+		result = append(result, byte(v))
 	}
-	if currentGroupSize != 0 {
-		maxGroups = append(maxGroups, currentGroupSize)
-	}
-	sumOriginal := 0
-	maxGroupOriginal := 0
+	result = append(result, 255)
 	for _, v := range groups {
-		sumOriginal += v
-		if v > maxGroupOriginal {
-			maxGroupOriginal = v
+		if v >= 255 {
+			panic("unexpected value")
 		}
-	}
-	sumMax := 0
-	maxGroupMax := 0
-	for _, v := range maxGroups {
-		sumMax += v
-		if v > maxGroupMax {
-			maxGroupMax = v
-		}
-	}
-	if sumOriginal > sumMax {
-		return false
-	}
-	if maxGroupOriginal > maxGroupMax {
-		return false
-	}
+		result = append(result, byte(v))
 
-	return true
+	}
+	return string(result)
 }
 
+var cache = map[string]int{}
+
 func possibleArrangements(springs []springState, groups []int) int {
-	if !possiblyValidArrangement(springs, groups) {
+	if len(springs) == 0 {
+		if len(groups) == 0 {
+			return 1
+		}
 		return 0
 	}
-	checkGroups := make([]int, 0)
-	currentGroupSize := 0
-	for i, v := range springs {
-		if v == unknown {
-			copy := append([]springState(nil), springs...)
-			copy[i] = broken
-			springs[i] = operational
-			return possibleArrangements(springs, groups) + possibleArrangements(copy, groups)
-		}
-		if v == broken {
-			currentGroupSize++
-		} else {
-			if currentGroupSize != 0 {
-				checkGroups = append(checkGroups, currentGroupSize)
-			}
-			currentGroupSize = 0
-		}
-	}
-	if currentGroupSize != 0 {
-		checkGroups = append(checkGroups, currentGroupSize)
-	}
-	groupsSame := len(groups) == len(checkGroups)
-	if groupsSame {
-		for i, v := range groups {
-			if checkGroups[i] != v {
-				groupsSame = false
+	if len(groups) == 0 {
+		for _, v := range springs {
+			if v == broken {
+				return 0
 			}
 		}
-	}
-	if groupsSame {
 		return 1
 	}
-	return 0
+	minLength := 0
+	for _, v := range groups {
+		minLength += v
+	}
+	minLength += len(groups) - 1
+	if len(springs) < minLength {
+		return 0
+	}
+
+	k := hashKey(springs, groups)
+	if v, ok := cache[k]; ok {
+		return v
+	}
+
+	result := possibleArrangementsStep2(springs, groups)
+	cache[k] = result
+	return result
+}
+
+func possibleArrangementsStep2(springs []springState, groups []int) int {
+	if springs[0] == operational {
+		i := 0
+		for ; i < len(springs); i++ {
+			if springs[i] != operational {
+				break
+			}
+		}
+		return possibleArrangements(springs[i:], groups)
+	}
+	// -----------------
+
+	arrangements := 0
+	if springs[0] == unknown {
+		arrangements += possibleArrangements(springs[1:], groups)
+	}
+	for i := 0; i < groups[0]; i++ {
+		if springs[i] == operational {
+			return arrangements
+		}
+	}
+	if len(springs) == groups[0] {
+		return arrangements + 1
+	}
+	if springs[groups[0]] == broken {
+		return arrangements
+	}
+	return arrangements + possibleArrangements(springs[groups[0]+1:], groups[1:])
 }
 
 func puzzle1(input []string) int {
